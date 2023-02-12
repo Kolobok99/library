@@ -17,15 +17,12 @@ import {ApiProperty} from "@nestjs/swagger";
 
 @Entity('users')
 export class UsersEntity {
-  @ApiProperty({ example: 1, description: 'Уникальный идентефикатор' })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ example: 'Nagibator999', description: 'Отображаемое имя пользователя' })
   @Column({ unique: true })
   username: string;
 
-  @ApiProperty({ example: , description: 'Уникальный идентефикатор' })
   @Column()
   password: string;
 
