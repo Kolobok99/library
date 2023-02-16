@@ -33,8 +33,10 @@ export class BooksService {
   }
 
   async giveBook(subID: number, bookID: number): Promise<BooksEntity> {
+    console.log('SubID в сервисе', subID)
     const sub = await this.subsService.findOne(subID);
     const book = await this.findOne(bookID);
+    console.log('Sub в сервисе', sub)
 
     if (sub?.books.length > 4) {
       throw new HttpException(

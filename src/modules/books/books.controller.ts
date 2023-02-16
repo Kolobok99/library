@@ -8,6 +8,7 @@ import { AuthGuard } from '@app/guards/auth.guard';
 import { AuthAdminGuard } from '@app/guards/auth.admin.guard';
 import { User } from '@app/modules/users/decorators/current.user.decorator';
 import { UsersEntity } from '@app/modules/users/users.entity';
+import {BookGiveDto} from "@app/modules/books/dto/book-give.dto";
 
 @Controller('books')
 export class BooksController {
@@ -29,10 +30,11 @@ export class BooksController {
   @UseGuards(AuthAdminGuard)
   @UseGuards(AuthGuard)
   async giveBook(
-    @Body('subID') subID: number,
+    @Body('sub') sub: BookGiveDto,
     @Param('id') bookID: number,
   ): Promise<BookResponseInterface> {
-    const book = await this.booksService.giveBook(subID, bookID);
+    console.log('SubID в контроллере', sub.id)
+    const book = await this.booksService.giveBook(sub.id, bookID);
     return this.booksService.buildBookResponse(book);
   }
 
