@@ -42,9 +42,9 @@ export class BooksService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-
-    if (book.subscription !== null) {
-      throw new HttpException('subscription not found', HttpStatus.NOT_FOUND);
+    console.log('sub_id', book.subscription?.id)
+    if (book.subscription?.id !== undefined) {
+      throw new HttpException('book уже взята', HttpStatus.NOT_FOUND);
     }
     book.subscription = sub;
     return await this.booksRepository.save(book);

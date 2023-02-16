@@ -12,8 +12,8 @@ export class RolesController {
   constructor(private readonly roleService: RolesService) {}
 
   @Post()
-  @UseGuards(AuthAdminGuard)
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthAdminGuard)
+  // @UseGuards(AuthGuard)
   async create(
     @Body('role') roleCreateDto: RoleCreateDto,
   ): Promise<RolesEntity> {
