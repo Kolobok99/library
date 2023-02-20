@@ -35,8 +35,8 @@ export class UsersController {
   @ApiOperation({summary: 'Список всех пользователей'})
   @ApiResponse({status: 200, type: [UsersEntity]})
   @Get()
-  @UseGuards(AuthAdminGuard)
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthAdminGuard)
+  // @UseGuards(AuthGuard)
   async findAll(): Promise<UsersResponseInterface> {
     const users = await this.usersService.findAll();
     return this.usersHelper.buildUsersResponse(users);
