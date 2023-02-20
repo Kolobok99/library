@@ -5,10 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { BooksEntity } from '@app/api/books/books.entity';
 import { BookCreateDto } from '@app/api/books/dto/book-create.dto';
-import { BookResponseInterface } from '@app/api/books/book-response.interface';
 
 import { SubscriptionsService } from '@app/api/subscriptions/subscriptions.service';
-import { BooksHelper } from "@app/api/books/books.helper";
 
 @Injectable()
 export class BooksService {
@@ -20,8 +18,8 @@ export class BooksService {
 
   async create(bookCreateDto: BookCreateDto): Promise<BooksEntity> {
     const booksData = await this.booksRepository.create(bookCreateDto);
-    const book = await this.booksRepository.save(booksData);
-    return book;
+    return await this.booksRepository.save(booksData);
+
   }
 
   async findOne(id: number): Promise<BooksEntity> {
@@ -37,10 +35,8 @@ export class BooksService {
   }
 
   async giveBook(subID: number, bookID: number): Promise<BooksEntity> {
-    console.log('SubID в сервисе', subID)
     const sub = await this.subsService.findOne(subID);
     const book = await this.findOne(bookID);
-    console.log('Sub в сервисе', sub)
 
     if (sub?.books.length > 4) {
       throw new HttpException(
@@ -48,9 +44,8 @@ export class BooksService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    console.log('sub_id', book?.subscription?.id)
     if (book?.subscription?.id !== undefined) {
-      throw new HttpException('book уже взята', HttpStatus.NOT_FOUND);
+      throw new HttpException('book already in use', HttpStatus.NOT_FOUND);
     }
     book.subscription = sub;
     return await this.booksRepository.save(book);

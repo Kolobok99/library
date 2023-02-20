@@ -1,3 +1,5 @@
+import { ValidationPipe } from "@nestjs/common";
+
 if (!process.env.IS_TS_NODE) {
   require('module-alias/register');
 }
@@ -15,6 +17,7 @@ async function bootstrap() {
   const port: number = config.get<number>('APP_PORT');
 
   app.setGlobalPrefix('api/v1');
+  app.useGlobalPipes(new ValidationPipe());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Library REST API')

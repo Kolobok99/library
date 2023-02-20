@@ -1,11 +1,8 @@
-import { hash } from 'bcrypt';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { UserResponseInterface } from '@app/api/users/types/user-response.interface';
-import { UsersResponseInterface } from '@app/api/users/types/users-response.interface';
 import { UsersEntity } from '@app/api/users/users.entity';
 import { UserCreateDto } from '@app/api/users/dto/user-create.dto';
 
@@ -23,13 +20,13 @@ export class UsersService {
   ) {}
 
   async findAll(): Promise<UsersEntity[]> {
-    const users = await this.usersRepository.find();
-    return users;
+    return  await this.usersRepository.find();
+
   }
 
-  async create(userCreateDto: UserCreateDto): Promise<UsersEntity> {
+  async create(userCreateDto: UserCreateDto, rolesValue?: string[]): Promise<UsersEntity> {
     const { username, password } = userCreateDto;
-    const roles = await this.roleService.findAllByValues(userCreateDto.roles);
+    const roles = await this.roleService.findAllByValues(userCreateDto.roles || rolesValue);
     const user = new UsersEntity();
 
     user.username = username;
@@ -52,10 +49,7 @@ export class UsersService {
 
   async delete(userID: number): Promise<DeleteResult> {
     const user = await this.findOneBy('id', userID);
-    // console.log('!user.subscription?.books', !user.subscription.books)
-    // console.log('user.subscription?.books', user.subscription.books)
-    // console.log('user.subscription?.books.length', user.subscription.books.length)
-    // console.log('!user.subscription?.books.length', !user.subscription.books.length)
+
     if (user.subscription?.books.length > 0) {
       throw new HttpException(
         'error: return the books',

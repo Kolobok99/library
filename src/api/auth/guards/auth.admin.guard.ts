@@ -18,7 +18,6 @@ export class AuthAdminGuard implements CanActivate {
       .getRequest<ExpressRequestInterface>();
 
     const roles: string[] = request.user.roles.map((role) => role.value);
-    console.log('user', request.user.roles);
     if (roles.includes('ADMIN')) {
       return true;
     }

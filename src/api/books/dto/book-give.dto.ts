@@ -5,5 +5,5 @@ export class BookGiveDto {
 
   @ApiProperty({type: Number, example: '1', description:'Уникальный идентификатор пользователя'})
   @IsNotEmpty()
-  user_id: number;
+  subID: number;
 }

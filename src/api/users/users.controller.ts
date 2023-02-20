@@ -19,10 +19,9 @@ import { UserResponseInterface } from '@app/api/users/types/user-response.interf
 import { AuthGuard } from '@app/api/auth/guards/auth.guard';
 import { AuthAdminGuard } from '@app/api/auth/guards/auth.admin.guard';
 import { AuthAdminOrUser } from '@app/api/auth/guards/auth.admin.or.user.guard';
-import {User} from "@app/api/users/decorators/current.user.decorator";
 import {UsersEntity} from "@app/api/users/users.entity";
 import { UsersHelper } from "@app/api/users/users.helper";
-import { ApiBody, ApiOperation, ApiResponse, ApiTags, OmitType } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UserRegistrationDto } from "@app/api/auth/dto/user-registration.dto";
 
 @ApiTags('Пользователи')
@@ -67,9 +66,7 @@ export class UsersController {
   @Put('/:id')
   @UseGuards(AuthAdminOrUser)
   @UseGuards(AuthGuard)
-  async update(
-    @Param('id') id: number,
-    @Body() userUpdateDto: UserRegistrationDto,
+  async update(@Param('id') id: number,@Body() userUpdateDto: UserRegistrationDto,
   ): Promise<UserResponseInterface> {
     const user = await this.usersService.update(id, userUpdateDto);
     return this.usersHelper.buildUserResponse(user);

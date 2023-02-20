@@ -23,6 +23,7 @@ export class AuthHelper {
       user: {
         id: user.id,
         username: user.username,
+        roles: user.roles,
         token: this.generateJwt(user)
       }
     };

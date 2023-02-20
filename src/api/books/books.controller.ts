@@ -1,4 +1,4 @@
-import {Body, Controller, Param, Post, Put, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Body, Controller, Param, Post, Put, UseGuards} from '@nestjs/common';
 
 import { BookCreateDto } from '@app/api/books/dto/book-create.dto';
 import { BooksService } from '@app/api/books/books.service';
@@ -10,7 +10,7 @@ import { User } from '@app/api/users/decorators/current.user.decorator';
 import { UsersEntity } from '@app/api/users/users.entity';
 import {BookGiveDto} from "@app/api/books/dto/book-give.dto";
 import { BooksHelper } from "@app/api/books/books.helper";
-import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { BooksEntity } from "@app/api/books/books.entity";
 
 @ApiTags('Книги')
@@ -24,7 +24,6 @@ export class BooksController {
   @ApiOperation({summary: 'Добавление новой книги'})
   @ApiResponse({status: 201, type: BooksEntity})
   @Post()
-  @UsePipes(new ValidationPipe())
   @UseGuards(AuthAdminGuard)
   @UseGuards(AuthGuard)
   async create(@Body() bookCreateDto: BookCreateDto): Promise<BookResponseInterface> {
@@ -35,12 +34,10 @@ export class BooksController {
   @ApiOperation({summary: 'Выдача книги'})
   @ApiResponse({status: 200, type: BooksEntity})
   @Put('/:id/give')
-  @UsePipes(new ValidationPipe())
   @UseGuards(AuthAdminGuard)
   @UseGuards(AuthGuard)
   async giveBook(@Body() sub: BookGiveDto, @Param('id') bookID: number): Promise<BookResponseInterface> {
-    console.log('SubID в контроллере', sub.user_id)
-    const book = await this.booksService.giveBook(sub.user_id, bookID);
+    const book = await this.booksService.giveBook(sub.subID, bookID);
     return this.booksHelper.buildBookResponse(book);
   }
 

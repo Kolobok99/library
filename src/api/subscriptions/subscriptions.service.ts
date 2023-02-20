@@ -33,13 +33,10 @@ export class SubscriptionsService {
   }
 
   async findOne(id: number): Promise<SubscriptionsEntity> {
-    console.log('id в FindONE', id);
     const sub = await this.subscriptionRepository.findOne({
       where: { id },
       relations: { books: true },
     });
-    console.log('Sub в FindONE', sub)
-    console.log('!sub', !sub)
     if (!sub) {
       throw new HttpException('subscription not found', HttpStatus.NOT_FOUND);
     }

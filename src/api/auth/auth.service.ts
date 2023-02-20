@@ -6,7 +6,6 @@ import { UserLoginDto } from '@app/api/auth/dto/user-login.dto';
 import { UsersService } from '@app/api/users/users.service';
 import { RolesService } from '@app/api/roles/roles.service';
 import { AuthHelper } from "@app/api/auth/auth.helper";
-import { UserCreateDto } from "@app/api/users/dto/user-create.dto";
 import { UserRegistrationDto } from "@app/api/auth/dto/user-registration.dto";
 
 @Injectable()
@@ -30,7 +29,7 @@ export class AuthService {
   }
 
   async registration(userRegistrationDto: UserRegistrationDto): Promise<AuthResponseInterface> {
-    const user = await this.userService.create(userRegistrationDto);
+    const user = await this.userService.create(userRegistrationDto, ['USER']);
     return this.authHelper.buildAuthResponse(user);
   }
 }
