@@ -12,7 +12,7 @@
     "start:dev": "nodemon",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "typeorm": "typeorm-ts-node-commonjs -d=src/database/database.source.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js  -d=src/database/database.source.ts",
     "db:drop": "npm run typeorm schema:drop",
     "db:create": "npm run typeorm migration:generate -n src/migrations/$npm_config_name",
     "db:migrate": " npm run typeorm migration:run",

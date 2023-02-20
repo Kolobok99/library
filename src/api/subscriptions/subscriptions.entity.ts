@@ -3,7 +3,6 @@ import {
   Entity,
   OneToMany, OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
 } from "typeorm";
 
 import { BooksEntity } from '../books/books.entity';
