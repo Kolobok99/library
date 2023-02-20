@@ -47,7 +47,7 @@ export class BooksController {
   @UseGuards(AuthGuard)
   async returnBook(@User() currentUser: UsersEntity, @Param('id') bookID: number): Promise<BookResponseInterface> {
     if (!currentUser.subscription) {
-      throw new HttpException('asdsa', HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException('Yoy don\'t have a sub', HttpStatus.UNPROCESSABLE_ENTITY);
     }
     const book = await this.booksService.returnBook(
       currentUser.subscription.id,
