@@ -1,4 +1,4 @@
-import {Body, Controller, Param, Post, Put, UseGuards} from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Param, Post, Put, UseGuards } from "@nestjs/common";
 
 import { BookCreateDto } from '@app/api/books/dto/book-create.dto';
 import { BooksService } from '@app/api/books/books.service';
@@ -46,6 +46,9 @@ export class BooksController {
   @Put('/:id/return')
   @UseGuards(AuthGuard)
   async returnBook(@User() currentUser: UsersEntity, @Param('id') bookID: number): Promise<BookResponseInterface> {
+    if (!currentUser.subscription) {
+      throw new HttpException('asdsa', HttpStatus.UNPROCESSABLE_ENTITY);
+    }
     const book = await this.booksService.returnBook(
       currentUser.subscription.id,
       bookID,
