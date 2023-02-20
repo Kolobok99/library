@@ -1,36 +1,19 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { getEnvPath } from "@app/common/helper/env.helper";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmConfigService } from "@app/database/database.service";
+import { ApiModule } from "@app/api/api.module";
 
-import { AppDataSource } from '@app/database.config';
-
-import { UsersModule } from '@app/modules/users/users.module';
-import { SubscriptionsModule } from '@app/modules/subscriptions/subscriptions.module';
-import { AuthModule } from '@app/modules/auth/auth.module';
-import { AuthMiddleware } from '@app/modules/auth/middleware/auth.middleware';
-import { RolesModule } from '@app/modules/roles/roles.module';
-import { BooksModule } from '@app/modules/books/books.module';
+const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(AppDataSource.options),
-    UsersModule,
-    SubscriptionsModule,
-    AuthModule,
-    RolesModule,
-    BooksModule,
+    ConfigModule.forRoot({ envFilePath, isGlobal: true }),
+    TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
+    ApiModule
   ],
   providers: [],
   controllers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
-}
+export class AppModule {}
